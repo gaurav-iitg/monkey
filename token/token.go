@@ -2,55 +2,45 @@ package token
 
 type TokenType string
 
-type Token struct{
+type Token struct {
 	Type    TokenType
 	Literal string
 }
 
-type Lexer struct {
-	input string
-	position int // current position in input (points to current char)
-	readPosition int // current reading position in input (after current char)
-	ch byte // current char under examination
-}
-
-func New(input string) *Lexer {
-	l := &Lexer{input: input}
-	l.readChar()
-	return l
-}
-
-func (l *Lexer) readChar(){
-	if l.readPosition >= len(l.input){
-		l.ch = 0
-	}else{
-		l.ch = l.input[l.readPosition]
-	}
-	l.position = l.readPosition
-	l.readPosition += 1
-}
-
 const (
-	ILLEGAL = "ILLEGAL"
-	EOF = "EOF"
+	ILLEGAL TokenType = "ILLEGAL"
+	EOF     TokenType = "EOF"
+	NEWLINE TokenType = "NEWLINE"
 
 	// Identifiers + literals
-	IDENT = "IDENT" // add, foobar, x, y, ...
-	INT = "INT" // 1343456
+	IDENT TokenType = "IDENT" // add, foobar, x, y, ...
+	INT   TokenType = "INT"   // 1343456
 
 	// Operators
-	ASSIGN   = "="
-	PLUS     = "+"
+	ASSIGN TokenType = "="
+	PLUS   TokenType = "+"
 
 	// Delimiters
-	COMMA     = ","
-	SEMICOLON = ";"
-	LPAREN = "("
-	RPAREN = ")"
-	LBRACE = "{"
-	RBRACE = "}"
+	COMMA     TokenType = ","
+	SEMICOLON TokenType = ";"
+	LPAREN    TokenType = "("
+	RPAREN    TokenType = ")"
+	LBRACE    TokenType = "{"
+	RBRACE    TokenType = "}"
 
 	// Keywords
-	FUNCTION = "FUNCTION"
-	LET = "LET" 
+	FUNCTION TokenType = "FUNCTION"
+	LET      TokenType = "LET"
 )
+
+var keywords = map[string]TokenType{
+	"fn":  FUNCTION,
+	"let": LET,
+}
+
+func LookupIdentFier(ident string) TokenType {
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+	return IDENT
+}
