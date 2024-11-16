@@ -9,7 +9,7 @@ type Lexer struct {
 	position     int  // current position in input (points to current char)
 	readPosition int  // current reading position in input (after current char)
 	ch           byte // current char under examination
-	lineNumber   int  // current line number
+
 }
 
 func New(input string) *Lexer {
@@ -61,9 +61,6 @@ func (l *Lexer) readChar() {
 		l.ch = 0
 	} else {
 		l.ch = l.input[l.readPosition]
-		if l.ch == '\n' {
-			l.lineNumber++
-		}
 	}
 	l.position = l.readPosition
 	l.readPosition += 1
